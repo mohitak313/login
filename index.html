@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), black);
+        }
+
+        .login-card {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(255, 255, 255, 0.5);
+            text-align: center;
+            width: 320px;
+            color: white;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+            opacity: 0.9;
+        }
+
+        .login-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(255, 255, 255, 0.7);
+            opacity: 1;
+        }
+
+        .login-card h2 {
+            margin-bottom: 1.5rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .input-box input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px white;
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .input-box i:hover {
+            transform: scale(1.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #62b6bc, #73cfd0);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-btn:hover {
+            box-shadow: 0 0 20px #64c7db;
+            transform: scale(1.05);
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            font-size: 0.9rem;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .hint:hover {
+            background: rgba(255, 255, 255, 0.4);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Login</h2>
+        <div class="input-box">
+            <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" placeholder="Password" required>
+            <i onclick="togglePasswordVisibility()">Show</i>
+        </div>
+        <button class="login-btn" onclick="validateLogin()">Login</button>
+        <div class="error-message" id="error-message">Invalid Username or Password</div>
+    </div>
+
+    <!-- Hint Button -->
+    <a href="hint.html" class="hint" id="hint-button">Need a Hint?</a>
+
+    <script>
+        const allowedUsers = [
+            { username: 'admin', password: 'admin123' },
+            { username: 'user1', password: 'password1' },
+            { username: 'user2', password: 'password2' },
+            { username: 'user3', password: 'password3' },
+            { username: 'user4', password: 'password4' },
+            { username: 'user5', password: 'password5' }
+        ];
+
+        let hasTriedLogin = false; // Flag to track if the user has attempted login once
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.input-box i');
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            toggleIcon.textContent = isPassword ? 'Hide' : 'Show';
+        }
+
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            const hintButton = document.getElementById('hint-button');
+
+            // Validate the user
+            const isValidUser = allowedUsers.some(
+                user => user.username === username && user.password === password
+            );
+
+            if (isValidUser) {
+                localStorage.setItem('isLoggedIn', 'true'); // Save login state
+                window.location.href = 'https://mohitak313.github.io/card/'; // Redirect to the locked page
+            } else {
+                errorMessage.style.display = 'block'; // Show error message
+                if (!hasTriedLogin) {
+                    hintButton.style.display = 'block'; // Show hint button after first failed attempt
+                    hasTriedLogin = true; // Mark the first failed attempt
+                }
+            }
+        }
+    </script>
+    
+</body>
+</html>
