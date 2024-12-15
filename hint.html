@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hint for login</title>
+    <title>Hint for Login</title>
     <style>
         body {
             margin: 0;
@@ -14,15 +14,19 @@
             background: black;
         }
 
-        .typewriter {
+        .typewriter-container {
             color: white;
             font-family: 'Courier New', Courier, monospace;
             font-size: 2rem;
-            overflow: hidden;
+            white-space: pre-wrap; /* To allow line breaks */
+        }
+
+        .line {
             border-right: 3px solid white;
+            display: inline-block;
+            overflow: hidden;
             width: 0;
-            white-space: nowrap;
-            animation: typing 8s steps(69) forwards, blink 0.75s step-end infinite;
+            animation: typing 2s steps(30) forwards, blink 0.75s step-end infinite;
         }
 
         @keyframes typing {
@@ -30,7 +34,7 @@
                 width: 0;
             }
             to {
-                width: 100em; /* Adjust to the length of the text */
+                width: 100%;
             }
         }
 
@@ -42,8 +46,35 @@
     </style>
 </head>
 <body>
+    <div class="typewriter-container">
+        <div class="line" id="line1"></div>
+        <div class="line" id="line2" style="animation: none; visibility: hidden;"></div>
+    </div>
 
-    <div class="typewriter">"The user is your identity and the key is so common!!!"</div>
+    <script>
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
 
+        const text1 = `"The user is your identity`;
+        const text2 = `and the key is so common!!!"`;
+
+        function typeLine(lineElement, text, callback) {
+            let index = 0;
+            const interval = setInterval(() => {
+                lineElement.textContent += text[index];
+                index++;
+                if (index === text.length) {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 100); // Typing speed
+        }
+
+        typeLine(line1, text1, () => {
+            line2.style.visibility = 'visible';
+            line2.style.animation = 'typing 2s steps(30) forwards, blink 0.75s step-end infinite';
+            typeLine(line2, text2);
+        });
+    </script>
 </body>
 </html>
