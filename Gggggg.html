@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>for babyyyy 🤍</title>
+<title>For Babyyyy 🤍</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Noto+Serif+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -260,14 +260,14 @@
     <div class="envelope-flap"></div>
     <div class="wax-seal">V</div>
   </div>
-  <div class="envelope-hint">tap the envelope to open ✦</div>
+  <div class="envelope-hint">Tap the envelope to open ✦</div>
 </div>
 
 <!-- HERO -->
 <section id="hero">
   <div class="eyebrow">Happy girlfriend's day</div>
-  <h1>for you,<br>babyyyy 🤍</h1>
-  <p>a tiny corner of the internet, built just for you, Vartika — scroll down and let me spoil you a little.</p>
+  <h1>For you,<br>Babyyyy 🤍</h1>
+  <p>A tiny corner of the internet, built just for you, Vartika — scroll down and let me spoil you a little.</p>
   <div class="heart-divider">❀ ❀ ❀</div>
 </section>
 
@@ -280,15 +280,15 @@
 
 <!-- REASONS -->
 <section id="reasons">
-  <h2>reasons you're my favourite person</h2>
-  <p class="sub">tap a card ↓</p>
+  <h2>Reasons you're my favourite person</h2>
+  <p class="sub">Tap a card ↓</p>
   <div class="reasons-grid" id="reasonsGrid"></div>
 </section>
 
 <!-- COUNTDOWN -->
 <section id="countdown">
-  <h2>until I get to spoil you again</h2>
-  <p class="sub">next girlfriend's day countdown</p>
+  <h2>Until I get to spoil you again</h2>
+  <p class="sub">Next girlfriend's day countdown</p>
   <div class="cd-grid" id="cdGrid">
     <div class="cd-box"><div class="num" id="cd-d">00</div><div class="label">days</div></div>
     <div class="cd-box"><div class="num" id="cd-h">00</div><div class="label">hrs</div></div>
@@ -307,19 +307,19 @@
 
 <!-- FINALE -->
 <section id="finale">
-  <h2>one more thing, babyyyy...</h2>
-  <button id="open-surprise">open your surprise 🤍</button>
+  <h2>One more thing, babyyyy...</h2>
+  <button id="open-surprise">Open your surprise 🤍</button>
 </section>
 
 <footer>
-  <span class="script">Happy girlfriend's day, Vartika.</span>
+  <span class="script">Happy Girlfriend's day, Vartika.</span>
   made with way too much love, just for you.
 </footer>
 
 <div id="surprise-overlay">
   <div>
-    <h1>i love you, babyyyy 💖</h1>
-    <p>every version of today, in every timeline, I'd still choose making this for you. you're it for me, Vartika. Happy girlfriend's day.</p>
+    <h1>I love you, babyyyy 💖</h1>
+    <p>Every version of today, in every timeline, I'd still choose making this for you. you're it for me, Vartika. Happy girlfriend's day.</p>
     <button id="close-surprise">close</button>
   </div>
 </div>
@@ -545,14 +545,14 @@ const kissBtn = document.getElementById('kiss-btn');
 const kissNum = document.getElementById('kiss-num');
 
 function sendKissTotalToTelegram(){
-  if(TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') return;
-  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  if(TELEGRAM_BOT_TOKEN === '8948741054:AAH_AxXKEauTuYKOT_2-wmPerndjCYi1w3U' || TELEGRAM_CHAT_ID === '459327766') return;
+  const url = `https://api.telegram.org/bot${8948741054:AAH_AxXKEauTuYKOT_2-wmPerndjCYi1w3U}/sendMessage`;
   fetch(url, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
       chat_id: TELEGRAM_CHAT_ID,
-      text: `💋 Vartika ne ab tak ${kisses} kisses bheji hain!`
+      text: `💋  ${kisses} kisses bheji hain!`
     })
   }).catch(()=>{ /* fail silently, don't break the page for her */ });
 }
