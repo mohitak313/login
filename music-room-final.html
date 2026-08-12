@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Music Room — Cinematic</title>
+<style>
+:root{--bg:#050508;--fg:#f7f7fa;--muted:#9b9ba5;--a:#9c7cff;--b:#ff75ad}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;overflow-x:hidden}.ambient{position:fixed;inset:-30%;z-index:-3;filter:blur(80px);transition:1s;
+background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--a) 34%,transparent),transparent 28%),radial-gradient(circle at 25% 75%,color-mix(in srgb,var(--b) 20%,transparent),transparent 32%)}
+.ambient:after{content:"";position:absolute;inset:0;background:radial-gradient(circle,transparent 35%,rgba(0,0,0,.72) 100%)}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+header{height:76px;padding:20px 30px;display:flex;justify-content:space-between;align-items:center}.brand{font-size:10px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#ddd}
+.actions{display:flex;gap:8px}.btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);color:#eee;border-radius:999px;padding:10px 14px;cursor:pointer;backdrop-filter:blur(18px);transition:.2s}.btn:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
+main{width:min(1180px,94vw);margin:auto;padding:34px 0 38px;display:flex;flex-direction:column;align-items:center}.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#85858f;margin-bottom:12px}h1{font-size:clamp(42px,6vw,76px);font-weight:500;letter-spacing:-.06em;line-height:.95;margin:0}.tag{color:#96969f;font-size:13px;margin:15px 0 32px}
+.stage{width:100%;height:390px;position:relative;perspective:1300px}.carousel{position:absolute;inset:0;transform-style:preserve-3d}
+.card{position:absolute;left:50%;top:50%;width:220px;aspect-ratio:1/1.12;border-radius:25px;overflow:hidden;background:#111;border:1px solid rgba(255,255,255,.13);cursor:pointer;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .7s,filter .7s,box-shadow .7s;box-shadow:0 28px 75px rgba(0,0,0,.52)}
+.card img{width:100%;height:100%;object-fit:cover;display:block}.card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.78))}
+.card .meta{position:absolute;z-index:2;left:16px;right:16px;bottom:15px}.meta small{font-size:9px;color:#bbb;letter-spacing:.12em}.meta b{display:block;font-size:13px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card.active{box-shadow:0 32px 100px color-mix(in srgb,var(--a) 30%,transparent),0 0 0 1px color-mix(in srgb,var(--a) 55%,transparent)}
+.now{display:flex;gap:11px;align-items:center;margin-bottom:18px}.now img{width:42px;height:42px;border-radius:11px;object-fit:cover}.now b{display:block;font-size:14px}.now span{display:block;color:#888;font-size:11px;margin-top:3px}
+.player-wrap{width:min(780px,100%)}.player{width:100%;aspect-ratio:16/9;background:#000;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 25px 90px rgba(0,0,0,.55)}#ytplayer{width:100%;height:100%}
+.controls{margin-top:10px;padding:9px;border-radius:20px;background:rgba(10,10,14,.76);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(22px);display:flex;align-items:center;gap:8px}.circle{width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.07);color:#fff;cursor:pointer}.circle.main{background:#fff;color:#070709}.circle:hover{background:rgba(255,255,255,.15)}.circle.main:hover{background:#ddd}
+.time{font-size:10px;color:#8e8e98;min-width:75px;text-align:center}.seek{height:4px;flex:1;border-radius:9px;background:rgba(255,255,255,.12);position:relative;cursor:pointer}.seek i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:9px;background:linear-gradient(90deg,var(--a),var(--b))}
+.status{width:100%;margin-top:12px;color:#777;text-align:center;font-size:10px;min-height:15px}.footer{width:100%;display:flex;justify-content:space-between;color:#666;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-top:25px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(15px);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}.overlay.open{display:flex}.modal{width:min(520px,100%);background:#111117;border:1px solid rgba(255,255,255,.13);border-radius:25px;padding:24px;box-shadow:0 30px 100px #000}.modal h2{margin:0 0 8px;font-size:22px}.modal p{color:#999;font-size:13px;line-height:1.6}.modal input{width:100%;padding:13px 14px;background:#08080b;color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:12px;outline:none}.modal-actions{display:flex;gap:8px;margin-top:12px}.primary{border:0;background:#fff;color:#08080a;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer}.secondary{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;padding:12px 16px;border-radius:12px;cursor:pointer}
+.drawer{position:fixed;inset:0;background:rgba(0,0,0,.64);backdrop-filter:blur(12px);z-index:40;display:none;align-items:flex-end}.drawer.open{display:flex}.sheet{width:100%;max-height:78vh;background:rgba(14,14,18,.97);border:1px solid rgba(255,255,255,.12);border-radius:28px 28px 0 0;padding:18px;overflow:auto}.sheet-top{display:flex;justify-content:space-between;align-items:center}.sheet h2{font-size:18px;margin:0}.search{width:100%;margin:12px 0;padding:13px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;outline:none}.list{display:grid;gap:5px}.item{display:flex;gap:12px;align-items:center;padding:9px;border-radius:14px;cursor:pointer}.item:hover,.item.active{background:rgba(255,255,255,.07)}.item img{width:52px;height:52px;border-radius:10px;object-fit:cover}.item b{font-size:13px}.item small{display:block;color:#888;margin-top:3px}.empty{text-align:center;color:#777;padding:30px}
+@media(max-width:700px){header{padding:18px}.stage{height:310px}.card{width:154px;border-radius:20px}main{padding-top:28px}.player{border-radius:17px}.controls{flex-wrap:wrap;border-radius:18px}.seek{order:10;flex-basis:100%;margin:2px 4px 3px}.footer{padding-bottom:20px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient" id="ambient"></div><div class="grain"></div>
+
+<header>
+  <div class="brand">Our Music Archive</div>
+  <div class="actions">
+    <button class="btn" id="playlistBtn">Playlist</button>
+    <button class="btn" id="settingsBtn">Connect</button>
+  </div>
+</header>
+
+<main>
+  <div class="eyebrow">A soundtrack of us</div>
+  <h1>Music Room</h1>
+  <div class="tag">Every song opens a different atmosphere.</div>
+
+  <section class="stage"><div class="carousel" id="carousel"></div></section>
+
+  <div class="now">
+    <img id="cover" alt="">
+    <div><b id="title">Loading playlist…</b><span id="artist">YouTube</span></div>
+  </div>
+
+  <section class="player-wrap">
+    <div class="player"><div id="ytplayer"></div></div>
+    <div class="controls">
+      <button class="circle" id="prev">⏮</button>
+      <button class="circle main" id="play">▶</button>
+      <button class="circle" id="next">⏭</button>
+      <span class="time" id="time">0:00 / 0:00</span>
+      <div class="seek" id="seek"><i></i></div>
+      <button class="circle" id="mute">🔊</button>
+    </div>
+    <div class="status" id="status"></div>
+  </section>
+
+  <div class="footer"><span id="count">0 tracks</span><span>Music Room</span></div>
+</main>
+
+<div class="overlay open" id="settings">
+  <div class="modal">
+    <h2>Connect your playlist</h2>
+    <p>Paste the full YouTube or YouTube Music playlist URL, or just the playlist ID. Playback uses the official YouTube embedded player.</p>
+    <input id="playlistInput" placeholder="https://music.youtube.com/playlist?list=PL...">
+    <div class="modal-actions">
+      <button class="primary" id="connect">Connect playlist</button>
+      <button class="secondary" id="demo">Preview demo</button>
+    </div>
+    <p style="margin-bottom:0">If the browser blocks the player when opening the HTML directly, run the file through a local server such as VS Code Live Server.</p>
+  </div>
+</div>
+
+<div class="drawer" id="drawer">
+ <div class="sheet">
+  <div class="sheet-top"><h2>Your playlist</h2><button class="btn" id="close">Close</button></div>
+  <input class="search" id="search" placeholder="Search tracks…">
+  <div class="list" id="list"></div>
+ </div>
+</div>
+
+<script>
+const S={playlist:'',ids:[],index:0,player:null,ready:false,demo:false,items:[]};
+const demoIds=['M7lc1UVf-VE','dQw4w9WgXcQ','kJQP7kiw5Fk','3JZ4pnNtyxQ','RgKAF5djSkY'];
+const $=x=>document.querySelector(x);
+
+function extractId(v){
+ v=(v||'').trim(); const m=v.match(/[?&]list=([A-Za-z0-9_-]+)/);
+ return m?m[1]:v;
+}
+function thumb(id){return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'}
+function setTheme(id){
+ const n=[...id].reduce((a,c)=>a+c.charCodeAt(0),0),h=[255,280,315,345,25,160,195,220][n%8];
+ document.documentElement.style.setProperty('--a',`hsl(${h} 85% 72%)`);
+ document.documentElement.style.setProperty('--b',`hsl(${(h+42)%360} 88% 70%)`);
+}
+function name(i){
+ const x=S.items[i];
+ return x?.title || (S.demo?'Demo track '+(i+1):'YouTube track '+(i+1));
+}
+function renderCards(){
+ const c=$('#carousel');c.innerHTML='';
+ S.ids.forEach((id,i)=>{
+  const el=document.createElement('div');el.className='card';el.dataset.i=i;
+  el.innerHTML=`<img src="${thumb(id)}" loading="lazy" alt=""><div class="meta"><small>${String(i+1).padStart(2,'0')}</small><b>${escapeHtml(name(i))}</b></div>`;
+  el.onclick=()=>select(i);
+  c.appendChild(el);
+ });
+ position();
+ $('#count').textContent=S.ids.length+' tracks';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function position(){
+ [...$('#carousel').children].forEach((el,i)=>{
+  let d=i-S.index, len=S.ids.length;
+  if(len>9)d=((d+Math.floor(len/2))%len)-Math.floor(len/2);
+  const a=Math.abs(d),x=d*(innerWidth<700?112:155),z=-a*95,sc=Math.max(.62,1-a*.13),op=a>3?.05:1-a*.18;
+  el.style.transform=`translate(-50%,-50%) translate3d(${x}px,0,${z}px) rotateY(${-d*8}deg) scale(${sc})`;
+  el.style.opacity=op;el.style.filter=a?`blur(${Math.min(4,a*1.2)}px)`:'none';el.style.zIndex=99-a;
+  el.classList.toggle('active',d===0);
+ });
+}
+function select(i){
+ if(!S.ids.length)return;
+ S.index=(i+S.ids.length)%S.ids.length;const id=S.ids[S.index];setTheme(id);position();
+ $('#cover').src=thumb(id);$('#title').textContent=name(S.index);$('#artist').textContent=S.items[S.index]?.artist||'YouTube';
+ if(S.player&&S.ready)S.player.loadVideoById(id);
+}
+function playPause(){if(!S.player)return;const x=S.player.getPlayerState();x===1?S.player.pauseVideo():S.player.playVideo()}
+function next(){if(S.player&&S.ready)S.player.nextVideo();else select(S.index+1)}
+function prev(){if(S.player&&S.ready)S.player.previousVideo();else select(S.index-1)}
+function sync(){
+ if(!S.player||!S.ready)return;
+ try{
+  const d=S.player.getDuration()||0,c=S.player.getCurrentTime()||0;
+  $('#time').textContent=fmt(c)+' / '+fmt(d);
+  $('#seek i').style.width=d?(c/d*100)+'%':'0%';
+ }catch(e){}
+ requestAnimationFrame(sync);
+}
+function fmt(x){x=Math.floor(x||0);return Math.floor(x/60)+':'+String(x%60).padStart(2,'0')}
+
+function createPlayer(){
+ if(S.player)return;
+ S.player=new YT.Player('ytplayer',{
+  width:'100%',height:'100%',
+  playerVars:{playsinline:1,rel:0,modestbranding:1},
+  events:{
+   onReady:e=>{
+    S.ready=true;
+    if(S.playlist) e.target.cuePlaylist({list:S.playlist,listType:'playlist',index:0});
+    else if(S.demo)e.target.cuePlaylist({playlist:S.ids,index:0});
+    $('#status').textContent='';
+   },
+   onStateChange:e=>{
+    if(e.data===1)$('#play').textContent='❚❚';
+    else $('#play').textContent='▶';
+    if(e.data===0)next();
+    try{
+     const p=e.target.getPlaylist();
+     if(p&&p.length){
+      S.ids=p;S.index=Math.max(0,e.target.getPlaylistIndex());
+      renderCards();selectMetaOnly();
+     }
+    }catch(x){}
+   },
+   onError:e=>$('#status').textContent='This YouTube video cannot be played. Try the next track.'
+  }
+ });
+}
+function selectMetaOnly(){
+ const id=S.ids[S.index];if(!id)return;setTheme(id);position();
+ $('#cover').src=thumb(id);$('#title').textContent=name(S.index);$('#artist').textContent=S.items[S.index]?.artist||'YouTube';
+}
+function connectPlaylist(){
+ const id=extractId($('#playlistInput').value);
+ if(!id){$('#status').textContent='Enter a valid playlist ID or URL.';return}
+ localStorage.setItem('musicRoomPlaylist',id);S.playlist=id;S.demo=false;S.items=[];S.ids=[];
+ $('#settings').classList.remove('open');$('#status').textContent='Loading playlist…';
+ if(!S.player)createPlayer();
+ else if(S.ready)S.player.cuePlaylist({list:id,listType:'playlist',index:0});
+ setTimeout(()=>{
+  try{
+   const p=S.player.getPlaylist();
+   if(p&&p.length){S.ids=p;renderCards();selectMetaOnly();$('#status').textContent=''}
+  }catch(e){}
+ },1200);
+}
+function demo(){
+ S.demo=true;S.playlist='';S.ids=[...demoIds];S.items=[];S.index=0;
+ localStorage.removeItem('musicRoomPlaylist');$('#settings').classList.remove('open');renderCards();select(0);
+ if(!S.player)createPlayer();else if(S.ready)S.player.cuePlaylist({playlist:S.ids,index:0});
+}
+function list(){
+ const q=$('#search').value.toLowerCase(),l=$('#list');l.innerHTML='';
+ S.ids.forEach((id,i)=>{
+  const t=name(i);if(!t.toLowerCase().includes(q))return;
+  const el=document.createElement('div');el.className='item'+(i===S.index?' active':'');
+  el.innerHTML=`<img src="${thumb(id)}"><div><b>${escapeHtml(t)}</b><small>${i+1} / ${S.ids.length}</small></div>`;
+  el.onclick=()=>{$('#drawer').classList.remove('open');select(i)};
+  l.appendChild(el);
+ });
+ if(!l.children.length)l.innerHTML='<div class="empty">No tracks found.</div>';
+}
+$('#connect').onclick=connectPlaylist;$('#demo').onclick=demo;$('#settingsBtn').onclick=()=>{$('#playlistInput').value=S.playlist;$('#settings').classList.add('open')};
+$('#playlistBtn').onclick=()=>{$('#drawer').classList.add('open');list()};$('#close').onclick=()=>$('#drawer').classList.remove('open');$('#search').oninput=list;
+$('#play').onclick=playPause;$('#next').onclick=next;$('#prev').onclick=prev;
+$('#mute').onclick=()=>{if(S.player){S.player.isMuted()?S.player.unMute():S.player.mute()}};
+$('#seek').onclick=e=>{if(!S.player||!S.ready)return;const r=e.currentTarget.getBoundingClientRect();S.player.seekTo(((e.clientX-r.left)/r.width)*(S.player.getDuration()||0),true)};
+addEventListener('resize',position);
+
+window.onYouTubeIframeAPIReady=()=>{
+ const saved=localStorage.getItem('musicRoomPlaylist');
+ if(saved){S.playlist=saved;$('#playlistInput').value=saved;createPlayer();$('#settings').classList.remove('open')}
+ else {demo()}
+};
+const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';document.head.appendChild(sc);
+sync();
+</script>
+</body>
+</html>
